@@ -1,0 +1,40 @@
+{
+  "conformsTo": "https://project-open-data.cio.gov/v1.1/schema",
+  "describedBy": "https://project-open-data.cio.gov/v1.1/schema/catalog.json",
+  "@context": "https://project-open-data.cio.gov/v1.1/schema/catalog.jsonld",
+  "@type": "dcat:Catalog",
+  "dataset": [
+    {
+      "accessLevel": "public",
+      "bureauCode": [
+        "018:001"
+      ],
+      "license": "https://project-open-data.cio.gov/unknown-license",
+      "identifier": "unique-identifier",
+      "contactPoint": {
+        "hasEmail": "mailto:utf@charset.gov",
+        "fn": "Jhon Chársët"
+      },
+      "description": "Somé déscriptión",
+      "programCode": [
+        "018:001"
+      ],
+      "distribution": [
+        {
+          "accessURL": "http://www.charset.gov/data",
+          "format": "txt"
+        }
+      ],
+      "modified": "2019-06-27 12:41:27",
+      "publisher": {
+        "name": "Atmöspheri€ Radiation"
+      },
+      "@type": "dcat:Dataset",
+      "keyword": [
+        "ARM",
+        "Á€tag"
+      ],
+      "title": "Tïtlé"
+    }
+  ]
+}

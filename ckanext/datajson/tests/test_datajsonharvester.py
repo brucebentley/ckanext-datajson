@@ -59,6 +59,11 @@ class TestDataJSONHarvester(object):
         log.info('GATHERING %s', url)
         obj_ids = harvester.gather_stage(job)
         log.info('job.gather_errors=%s', job.gather_errors)
+
+        if len(job.gather_errors) > 0:
+            errors = '; '.join(job.gather_errors)
+            raise ValueError('Errors Gathering: {}'.format(errors))
+
         log.info('obj_ids=%s', obj_ids)
         if len(obj_ids) == 0:
             # nothing to see
@@ -79,11 +84,20 @@ class TestDataJSONHarvester(object):
             log.info('ho errors=%s', harvest_object.errors)
             log.info('result 1=%s', result)
 
+            if len(harvest_object.errors) > 0:
+                errors = '; '.join(harvest_object.errors)
+                raise ValueError('Errors Fetching: {}'.format(errors))
+
             # fetch stage
             log.info('IMPORTING %s', url)
             result = harvester.import_stage(harvest_object)
 
             log.info('ho errors 2=%s', harvest_object.errors)
+
+            if len(harvest_object.errors) > 0:
+                errors = '; '.join(harvest_object.errors)
+                raise ValueError('Errors Importing: {}'.format(errors))
+
             log.info('result 2=%s', result)
             log.info('ho pkg id=%s', harvest_object.package_id)
             dataset = model.Package.get(harvest_object.package_id)
@@ -173,6 +187,15 @@ class TestDataJSONHarvester(object):
     def test_datason_defense_bad_charset(self):
         url = 'http://127.0.0.1:%s/defense' % mock_datajson_source.PORT
         log.info('Testing defense.gov/data.json')
+        for harvest_object, result, dataset in self.run_source(url=url, limit=20):
+            log.info('Dataset: {}'.format(dataset))
+            tags = [tag.name for tag in dataset.get_tags()]
+            log.info('Tags: {}'.format(tags))
+            log.info('Result: {}'.format(result))
+    
+    def test_utf8(self):
+        url = 'http://127.0.0.1:%s/charset' % mock_datajson_source.PORT
+        log.info('Testing char utf8')
         for harvest_object, result, dataset in self.run_source(url=url, limit=20):
             log.info('Dataset: {}'.format(dataset))
             tags = [tag.name for tag in dataset.get_tags()]

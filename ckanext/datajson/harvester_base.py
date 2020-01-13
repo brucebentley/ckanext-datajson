@@ -561,12 +561,13 @@ class DatasetHarvesterBase(HarvesterBase):
             log.info('Moving keywords as datasets in {}'.format(dataset))
 
             for keyword in dataset.get('keyword', []):
-                log.info('Analyzing keyword: {}'.format(keyword))
-                group_name = munge_title_to_name(keyword).replace('_', '-')
+                cleaned_keyword = munge_title_to_name(keyword).replace('_', '-')
+                log.info('Analyzing keyword: {}'.format(cleaned_keyword))
+                group_name = cleaned_keyword
                 group_base = {"id": group_name}
                 try:
                     get_action('group_show')(self.context(), group_base)
-                    log.info('Group already exists: {} {}'.format(group_name, keyword))
+                    log.info('Group already exists: {}'.format(group_name))
                     groups.append({"name": group_name})
                 except NotFound:
                     if remote_groups == 'create':
@@ -575,7 +576,7 @@ class DatasetHarvesterBase(HarvesterBase):
                                       "title": keyword}
 
                         get_action('group_create')(self.context(), group_base)
-                        log.info('Group Created: {} {}'.format(group_name, keyword))
+                        log.info('Group Created:{}'.format(group_name))
                         groups.append({"name": group_name})
 
         # Assemble basic information about the dataset.
