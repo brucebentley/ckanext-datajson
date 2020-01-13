@@ -61,8 +61,15 @@ class TestDataJSONHarvester(object):
         log.info('job.gather_errors=%s', job.gather_errors)
 
         if len(job.gather_errors) > 0:
-            errors = '; '.join(job.gather_errors)
-            raise ValueError('Errors Gathering: {}'.format(errors))
+            real_errors = []
+            for error in job.gather_errors:
+                # ignore some not important errors
+                if 'Duplicate entry ignored for identifier' in str(error):
+                    continue
+                else:
+                    real_errors.append(error)
+            if len(real_errors) > 0:
+                raise ValueError('Errors Gathering: {}'.format(real_errors))
 
         log.info('obj_ids=%s', obj_ids)
         if len(obj_ids) == 0:
@@ -85,8 +92,7 @@ class TestDataJSONHarvester(object):
             log.info('result 1=%s', result)
 
             if len(harvest_object.errors) > 0:
-                errors = '; '.join(harvest_object.errors)
-                raise ValueError('Errors Fetching: {}'.format(errors))
+                raise ValueError('Errors Fetching: {}'.format(harvest_object.errors))
 
             # fetch stage
             log.info('IMPORTING %s', url)
@@ -95,8 +101,7 @@ class TestDataJSONHarvester(object):
             log.info('ho errors 2=%s', harvest_object.errors)
 
             if len(harvest_object.errors) > 0:
-                errors = '; '.join(harvest_object.errors)
-                raise ValueError('Errors Importing: {}'.format(errors))
+                raise ValueError('Errors Importing: {}'.format(harvest_object.errors))
 
             log.info('result 2=%s', result)
             log.info('ho pkg id=%s', harvest_object.package_id)
