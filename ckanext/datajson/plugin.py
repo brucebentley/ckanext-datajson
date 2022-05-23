@@ -1,4 +1,4 @@
-import StringIO
+from io import StringIO
 import json
 import logging
 import sys
@@ -8,16 +8,18 @@ import ckan.model as model
 import ckan.plugins as p
 import os
 import re
-from ckan.lib.base import BaseController, render, c
+from ckan.lib.base import render, c
 from jsonschema.exceptions import best_match
-from pylons import request, response
 from logging import getLogger
-from helpers import get_export_map_json, detect_publisher, get_validator
-from package2pod import Package2Pod
+from ckanext.datajson.helpers import get_export_map_json, detect_publisher, get_validator
+from ckanext.datajson.package2pod import Package2Pod
 from ckanext.harvest.log import DBLogHandler
 
 logger = logging.getLogger(__name__)
 draft4validator = get_validator()
+
+request = p.toolkit.request
+response = request
 
 try:
     from collections import OrderedDict  # 2.7

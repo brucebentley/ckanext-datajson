@@ -1,5 +1,7 @@
 import simplejson as json
-import urllib2, os, sys
+import os, sys
+from urllib.request import urlopen
+from urllib.error import URLError
 
 #Change these variables based on environment
 big_datajson_source = 'http://localhost/data.json'
@@ -21,10 +23,10 @@ def main(dest=None):
     #Get the contents of the big data.json file
     response = None
     try:
-        response = urllib2.urlopen(big_datajson_source)
-    except urllib2.URLError:
+        response = urlopen(big_datajson_source)
+    except URLError:
         #Fall back on default
-        response = urllib2.urlopen('http://localhost:5000/data.json')
+        response = urlopen('http://localhost:5000/data.json')
 
     datasets = json.load(response)
 
@@ -44,13 +46,13 @@ def main(dest=None):
 
 if __name__=="__main__":
     if len(sys.argv)>2:
-        print "build_organizations.py <optional:/path/to/output/folder>"
+        print("build_organizations.py <optional:/path/to/output/folder>")
 
     if len(sys.argv)==2:
         if not os.path.exists(sys.argv[1]):
-            print "Path does not exist: {0}".format(sys.argv[1])
+            print("Path does not exist: {0}".format(sys.argv[1]))
         elif not os.path.isdir(sys.argv[1]):
-            print "Not a directory: {0}".format(sys.argv[1])
+            print("Not a directory: {0}".format(sys.argv[1]))
         else:
             main(sys.argv[1])
     else:
@@ -69,10 +71,10 @@ def enterprise_main(dest=None):
     #Get the contents of the big data.json file
     response = None
     try:
-        response = urllib2.urlopen(enterprise_datajson_source)
-    except urllib2.URLError:
+        response = urlopen(enterprise_datajson_source)
+    except URLError:
         #Fall back on default
-        response = urllib2.urlopen('http://localhost:5000/enterprisedata.json')
+        response = urlopen('http://localhost:5000/enterprisedata.json')
 
     datasets = json.load(response)
 
@@ -92,13 +94,13 @@ def enterprise_main(dest=None):
 
 if __name__=="__main__":
     if len(sys.argv)>2:
-        print "build_organizations.py <optional:/path/to/output/folder>"
+        print("build_organizations.py <optional:/path/to/output/folder>")
 
     if len(sys.argv)==2:
         if not os.path.exists(sys.argv[1]):
-            print "Path does not exist: {0}".format(sys.argv[1])
+            print("Path does not exist: {0}".format(sys.argv[1]))
         elif not os.path.isdir(sys.argv[1]):
-            print "Not a directory: {0}".format(sys.argv[1])
+            print("Not a directory: {0}".format(sys.argv[1]))
         else:
             main(sys.argv[1])
     else:

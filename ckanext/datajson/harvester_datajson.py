@@ -1,11 +1,11 @@
 from ckanext.datajson.harvester_base import DatasetHarvesterBase
-from parse_datajson import parse_datajson_entry
+from ckanext.datajson.parse_datajson import parse_datajson_entry
 # from parse_dep_of_ed import parse_datajson_entry_for_dep_of_ed_schema
 import logging
 log = logging.getLogger(__name__)
 
-
-import urllib2, json, ssl
+from urllib.request import Request, urlopen
+import json, ssl
 
 class DataJsonHarvester(DatasetHarvesterBase):
     '''
@@ -24,17 +24,17 @@ class DataJsonHarvester(DatasetHarvesterBase):
     def load_remote_catalog(self, harvest_job):
         url = harvest_job.source.url
         log.info('Loading catalog from URL: {}'.format(url))
-        req = urllib2.Request(url)
+        req = Request(url)
         # todo: into config and across harvester
         req.add_header('User-agent', 'Data.gov/2.0')
 
         try:
-            conn = urllib2.urlopen(req)
-        except Exception, e:
+            conn = urlopen(req)
+        except Exception as e:
             log.error('Failed to connect to {}: {} ({})'.format(url, e, type(e)))
             # try to avoid SSL errors
             try:
-                conn = urllib2.urlopen(req, context=ssl._create_unverified_context())
+                conn = urlopen(req, context=ssl._create_unverified_context())
             except Exception as e:
                 log.error('Failed (SSL) to connect to {}: {} ({})'.format(url, e, type(e)))
                 raise

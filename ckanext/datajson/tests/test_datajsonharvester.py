@@ -1,7 +1,6 @@
 import copy
-from urllib2 import URLError
+from urllib.error import URLError
 from nose.tools import assert_equal, assert_raises, assert_in
-import json
 from mock import patch, MagicMock, Mock
 from requests.exceptions import HTTPError, RequestException
 

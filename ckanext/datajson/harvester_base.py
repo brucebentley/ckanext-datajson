@@ -13,7 +13,7 @@ from ckanext.harvest.model import HarvestJob, HarvestObject, HarvestGatherError,
                                     HarvestObjectError, HarvestObjectExtra
 from ckanext.harvest.harvesters.base import HarvesterBase
 
-import uuid, datetime, hashlib, urllib2, json, json, os
+import uuid, hashlib, json, json, os
 
 from jsonschema.validators import Draft4Validator
 from jsonschema import FormatChecker

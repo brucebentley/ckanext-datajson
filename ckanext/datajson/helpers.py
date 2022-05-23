@@ -5,13 +5,14 @@ except ImportError:
 
 import logging
 
-from pylons import config
-from ckan import plugins as p
+import ckan.plugins as p
 from ckan.lib import helpers as h
 from ckan.logic import NotFound, get_action, check_access
 from ckan.lib.munge import munge_title_to_name
 import re
 import simplejson as json
+
+config = p.toolkit.config
 
 REDACTED_REGEX = re.compile(
     r'^(\[\[REDACTED).*?(\]\])$'
@@ -307,7 +308,7 @@ accrual_periodicity_dict = {
 
 reverse_accrual_periodicity_dict = dict((v, k[0].upper() + k[1:].lower())
                                         for k, v
-                                        in accrual_periodicity_dict.iteritems()
+                                        in accrual_periodicity_dict.items()
                                         if v.startswith('R/'))
 reverse_accrual_periodicity_dict['irregular'] = 'Irregular'
 reverse_accrual_periodicity_dict['R/P0.25Y'] = 'Quarterly'

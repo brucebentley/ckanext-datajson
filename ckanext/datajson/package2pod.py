@@ -5,7 +5,7 @@ except ImportError:
 
 from logging import getLogger
 
-from helpers import *
+from ckanext.datajson.helpers import *
 
 log = getLogger(__name__)
 

@@ -4,7 +4,7 @@ except ImportError:
     from sqlalchemy.util import OrderedDict
 
 def dataset_to_jsonld(dataset):
-    from plugin import DataJsonPlugin
+    from ckanext.datajson.plugin import DataJsonPlugin
 	
     ret = OrderedDict([
        ("@id", DataJsonPlugin.site_url + "/dataset/" + dataset["identifier"]),

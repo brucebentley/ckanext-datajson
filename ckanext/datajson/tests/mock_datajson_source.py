@@ -7,7 +7,7 @@ import copy
 import urllib
 import ssl
 
-from urllib2 import URLError
+from urllib.error import URLError
 import SimpleHTTPServer
 import SocketServer
 from threading import Thread
