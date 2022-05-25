@@ -65,13 +65,12 @@ class DataJsonPlugin(p.SingletonPlugin):
         # relative to the path of *this* file. Wow.
         p.toolkit.add_template_directory(config, "templates")
 
-    @staticmethod
-    def datajson_inventory_links_enabled():
-        return DataJsonPlugin.inventory_links_enabled
+    def _datajson_inventory_links_enabled(self):
+        return self.inventory_links_enabled
 
     def get_helpers(self):
         return {
-            'datajson_inventory_links_enabled': self.datajson_inventory_links_enabled
+            'datajson_inventory_links_enabled': self._datajson_inventory_links_enabled
         }
 
     # def before_map(self, m):
@@ -109,7 +108,7 @@ class DataJsonPlugin(p.SingletonPlugin):
         if self.route_enabled:
             # datajson_export
             self.datajson_blueprint.add_url_rule(self.route_path,
-                view_func=datajson_views.generate_json, methods=['GET'])
+                view_func=datajson_views.generate_json)
             # organization_export
             self.datajson_blueprint.add_url_rule('/organization/<org_id>/data.json',
                 view_func=datajson_views.generate_org_json)
@@ -127,7 +126,7 @@ class DataJsonPlugin(p.SingletonPlugin):
 
         # datajsonvalidator
         self.datajson_blueprint.add_url_rule('/pod/validate',
-            view_func=datajson_views.validator)
+            view_func=datajson_views.validator, methods=['GET', 'POST'])
         # harvester_versions
         self.datajson_blueprint.add_url_rule('/harvester_versions',
             view_func=datajson_views.get_versions)

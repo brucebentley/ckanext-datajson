@@ -84,13 +84,14 @@ import lepl.apps.rfc3696
 email_validator = lepl.apps.rfc3696.Email()
 
 # load the OMB bureau codes on first load of this module
-import urllib
+from urllib.request import urlopen
 import csv
 
 omb_burueau_codes = set()
-for row in csv.DictReader(urllib.urlopen("https://project-open-data.cio.gov/data/omb_bureau_codes.csv")):
+omb_file = urlopen("https://project-open-data.cio.gov/data/omb_bureau_codes.csv")
+omb_csv = omb_file.read().decode('utf-8')
+for row in csv.DictReader(omb_file.read().decode('utf-8')):
     omb_burueau_codes.add(row["Agency Code"] + ":" + row["Bureau Code"])
-
 
 # main function for validation
 def do_validation(doc, errors_array, seen_identifiers):

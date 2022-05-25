@@ -2,9 +2,9 @@ import json
 import os
 import logging
 import sys
-from io import StringIO
+from io import StringIO, BytesIO
 
-from flask import make_response
+from flask import make_response, Response
 from ckan.common import config
 import ckan.plugins as p
 import ckan.lib.dictization.model_dictize as model_dictize
@@ -86,14 +86,12 @@ class DataJsonViews:
             if p.toolkit.check_access('package_create', {'model': model, 'user': c.user},
                                       {'owner_org': org_id}):
                 if org_id:
-                    response = make_response(self.make_json(export_type, org_id))
-                    # set content type (charset required or pylons throws an error)
-                    response.content_type = 'application/json; charset=UTF-8'
-
-                    # allow caching of response (e.g. by Apache)
-                    del response.headers["Cache-Control"]
-                    del response.headers["Pragma"]
-                    return response
+                    binary = self.make_json(export_type, org_id)
+                    return Response(
+                        binary,
+                        mimetype='application/zip',
+                        headers={'Content-Disposition': 'attachment;filename={}.zip'.format(export_type)}
+                    )
             return "Invalid organization id"
         return "Invalid type"
 
@@ -213,8 +211,10 @@ class DataJsonViews:
         packages = self.get_all_group_packages(group_id=owner_org, with_private=with_private)
         # get packages for sub-agencies.
         sub_agency = model.Group.get(owner_org)
-        if 'sub-agencies' in sub_agency.extras.col.target \
-                and sub_agency.extras.col.target['sub-agencies'].state == 'active':
+
+        if sub_agency.extras.col.get('target', None) \
+            and 'sub-agencies' in sub_agency.extras.col.target \
+            and sub_agency.extras.col.target['sub-agencies'].state == 'active':
             sub_agencies = sub_agency.extras.col.target['sub-agencies'].value
             sub_agencies_list = sub_agencies.split(",")
             for sub in sub_agencies_list:
@@ -254,7 +254,7 @@ class DataJsonViews:
         """
         import zipfile
 
-        o = StringIO()
+        o = BytesIO()
         zf = zipfile.ZipFile(o, mode='w')
 
         data_file_name = 'data.json'
@@ -289,14 +289,10 @@ class DataJsonViews:
         zf.close()
         o.seek(0)
 
-        binary = o.read()
+        binary = o.getvalue()
         o.close()
 
-        response = make_response(binary)
-        response.content_type = 'application/octet-stream'
-        response.content_disposition = 'attachment; filename="%s.zip"' % zip_name
-
-        return response
+        return binary
 
     def get_versions(self):
         from ckanext.datajson.harvester_datajson import DataJsonHarvester
@@ -309,17 +305,16 @@ class DataJsonViews:
 
     def validator(self):
         # Validates that a URL is a good data.json file.
-        if request.method == "POST" and "url" in request.POST and request.POST["url"].strip() != "":
-            c.source_url = request.POST["url"]
+        if request.method == "POST" and "url" in request.form and request.form.get("url").strip() != "":
+            c.source_url = request.form.get('url')
             c.errors = []
 
-            import urllib
-            import json
-            from datajsonvalidator import do_validation
+            from urllib.request import urlopen
+            from ckanext.datajson.datajsonvalidator import do_validation
 
             body = None
             try:
-                body = json.load(urllib.urlopen(c.source_url))
+                body = json.load(urlopen(c.source_url))
             except IOError as e:
                 c.errors.append(("Error Loading File", ["The address could not be loaded: " + str(e)]))
             except ValueError as e:
