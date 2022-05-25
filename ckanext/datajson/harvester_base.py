@@ -774,9 +774,9 @@ class DatasetHarvesterBase(HarvesterBase):
                 + "|" + harvest_source.config + "|"
                 + self.HARVESTER_VERSION).hexdigest()
         else:
-            return hashlib.sha1(json.dumps(datasetdict, sort_keys=True)
-                + "|" + json.dumps(catalog_extras,
-                sort_keys=True)).hexdigest()
+            return hashlib.sha1(json.dumps(datasetdict, sort_keys=True).encode('utf-8')
+                + "|".encode('utf-8') + json.dumps(catalog_extras,
+                sort_keys=True).encode('utf-8')).hexdigest()
         
     def find_extra(self, pkg, key):
         for extra in pkg["extras"]:
