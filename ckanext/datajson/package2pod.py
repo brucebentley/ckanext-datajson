@@ -18,7 +18,7 @@ class Package2Pod:
 
     @staticmethod
     def wrap_json_catalog(dataset_dict, json_export_map):
-        catalog_headers = [(x, y) for x, y in json_export_map.get('catalog_headers').iteritems()]
+        catalog_headers = [(x, y) for x, y in json_export_map.get('catalog_headers').items()]
         catalog = OrderedDict(
             catalog_headers + [('dataset', dataset_dict)]
         )
@@ -26,7 +26,7 @@ class Package2Pod:
 
     @staticmethod
     def filter(content):
-        if not isinstance(content, (str, unicode)):
+        if not isinstance(content, (str, str)):
             return content
         content = Package2Pod.strip_redacted_tags(content)
         content = strip_if_string(content)
@@ -34,7 +34,7 @@ class Package2Pod:
 
     @staticmethod
     def strip_redacted_tags(content):
-        if not isinstance(content, (str, unicode)):
+        if not isinstance(content, (str, str)):
             return content
         return re.sub(REDACTED_TAGS_REGEX, '', content)
 
@@ -67,7 +67,7 @@ class Package2Pod:
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             filename = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            log.error("%s : %s : %s : %s", exc_type, filename, exc_tb.tb_lineno, unicode(e))
+            log.error("%s : %s : %s : %s", exc_type, filename, exc_tb.tb_lineno, str(e))
             raise e
 
     @staticmethod
@@ -89,7 +89,7 @@ class Package2Pod:
             Wrappers.pkg = package
             Wrappers.full_field_map = json_fields
 
-            for key, field_map in json_fields.iteritems():
+            for key, field_map in json_fields.items():
                 # log.debug('%s => %s', key, field_map)
 
                 field_type = field_map.get('type', 'direct')
@@ -138,21 +138,24 @@ class Package2Pod:
                         if array_key:
                             dataset[key] = [Package2Pod.filter(t[array_key]) for t in package.get(field, {})]
                 if wrapper:
-                    # log.debug('wrapper: %s', wrapper)
-                    method = getattr(Wrappers, wrapper)
-                    if method:
-                        Wrappers.current_field_map = field_map
-                        dataset[key] = method(dataset.get(key))
+                    try:
+                        # log.debug('wrapper: %s', wrapper)
+                        method = getattr(Wrappers, wrapper)
+                        if method:
+                            Wrappers.current_field_map = field_map
+                            dataset[key] = method(dataset.get(key))
+                    except AttributeError as e:
+                        log.error(e)
 
             # CKAN doesn't like empty values on harvest, let's get rid of them
             # Remove entries where value is None, "", or empty list []
-            dataset = OrderedDict([(x, y) for x, y in dataset.iteritems() if y is not None and y != "" and y != []])
+            dataset = OrderedDict([(x, y) for x, y in dataset.items() if y is not None and y != "" and y != []])
 
             return dataset
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             filename = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            log.error("%s : %s : %s : %s", exc_type, filename, exc_tb.tb_lineno, unicode(e))
+            log.error("%s : %s : %s : %s", exc_type, filename, exc_tb.tb_lineno, str(e))
             raise e
 
     @staticmethod
@@ -178,7 +181,7 @@ class Package2Pod:
                 from datajsonvalidator import do_validation
                 do_validation([dict(dataset_dict)], errors, Package2Pod.seen_identifiers)
             except Exception as e:
-                errors.append(("Internal Error", ["Something bad happened: " + unicode(e)]))
+                errors.append(("Internal Error", ["Something bad happened: " + str(e)]))
             if len(errors) > 0:
                 for error in errors:
                     log.warn(error)
@@ -366,7 +369,7 @@ class Wrappers:
         for r in package["resources"]:
             resource = OrderedDict([('@type', "dcat:Distribution")])
 
-            for pod_key, json_map in distribution_map.iteritems():
+            for pod_key, json_map in distribution_map.items():
                 value = strip_if_string(r.get(json_map.get('field'), json_map.get('default')))
 
                 if Wrappers.redaction_enabled:
@@ -411,7 +414,7 @@ class Wrappers:
                 continue
 
             striped_resource = OrderedDict(
-                [(x, y) for x, y in resource.iteritems() if y is not None and y != "" and y != []])
+                [(x, y) for x, y in resource.items() if y is not None and y != "" and y != []])
 
             arr += [OrderedDict(striped_resource)]
 

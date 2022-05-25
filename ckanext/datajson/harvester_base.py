@@ -120,7 +120,7 @@ class DatasetHarvesterBase(HarvesterBase):
 
     def extra_schema(self):
         return {
-            'validator_schema': [ignore_empty, unicode, validate_schema],
+            'validator_schema': [ignore_empty, str, validate_schema],
         }
 
     def gather_stage(self, harvest_job):
@@ -164,7 +164,7 @@ class DatasetHarvesterBase(HarvesterBase):
             # get a list of needed catalog values and put into hobj
             catalog_fields = ['@context', '@id', 'conformsTo', 'describedBy']
             catalog_extras = dict(('catalog_'+k, v)
-                for (k, v) in catalog_values.iteritems()
+                for (k, v) in catalog_values.items()
                 if k in catalog_fields)
 
         # Loop through the packages we've already imported from this source
@@ -327,7 +327,7 @@ class DatasetHarvesterBase(HarvesterBase):
                 parent_pkg_id = existing_parents[dataset.get('isPartOf')]['id']
                 extras.append(HarvestObjectExtra(
                     key='collection_pkg_id', value=parent_pkg_id))
-            for k, v in catalog_extras.iteritems():
+            for k, v in catalog_extras.items():
                 extras.append(HarvestObjectExtra(key=k, value=v))
 
             obj = HarvestObject(
@@ -622,7 +622,7 @@ class DatasetHarvesterBase(HarvesterBase):
         unmapped = []
 
         log.debug('import process extras harvest_object=%s', harvest_object.id)
-        for key, value in dataset_processed.iteritems():
+        for key, value in dataset_processed.items():
             if key in skip_processed:
                 continue
             new_key = mapping_processed.get(key)
@@ -634,7 +634,7 @@ class DatasetHarvesterBase(HarvesterBase):
             new_keys = []
             values = []
             if isinstance(new_key, dict): # when schema is not 1.0
-                for _key, _value in new_key.iteritems():
+                for _key, _value in new_key.items():
                     new_keys.append(_value)
                     values.append(value.get(_key))
             else:
@@ -645,7 +645,7 @@ class DatasetHarvesterBase(HarvesterBase):
                 continue
 
             mini_dataset = dict(zip(new_keys, values))
-            for mini_key, mini_value in mini_dataset.iteritems():
+            for mini_key, mini_value in mini_dataset.items():
                 if not mini_value:
                     continue
                 if mini_key.endswith('[]'):
@@ -692,7 +692,7 @@ class DatasetHarvesterBase(HarvesterBase):
                 {'key':'collection_package_id', 'value':parent_pkg_id}
             )
 
-        for k, v in catalog_extras.iteritems():
+        for k, v in catalog_extras.items():
             extras.append({'key':k, 'value':v})
 
         # Set specific information about the dataset.
