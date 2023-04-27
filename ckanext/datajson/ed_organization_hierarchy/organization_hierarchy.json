@@ -1,0 +1,193 @@
+[
+    {
+      "title": "Office of Security, Facilities and Logistics (OSFL)",
+      "name": "osfl",
+      "subOrganizationOf": "ofo"
+    },
+    {
+      "title": "Office of Safe and Healthy Students (OSHS)",
+      "name": "oshs",
+      "subOrganizationOf": "oese"
+    },
+    {
+      "title": "Office of Migrant Education (MEP)",
+      "name": "mep",
+      "subOrganizationOf": "oese"
+    },
+    {
+      "title": "Office of Special Education Programs (OSEP)",
+      "name": "osep",
+      "subOrganizationOf": "osers"
+    },
+    {
+      "title": "Office of Communications and Outreach (OCO)",
+      "name": "oco",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of Elementary and Secondary Education (OESE)",
+      "name": "oese",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of Innovation and Improvement (OII)",
+      "name": "oii",
+      "subOrganizationOf": "oese"
+    },
+    {
+      "title": "Office of Postsecondary Education (OPE)",
+      "name": "ope",
+      "subOrganizationOf": "ous"
+    },
+    {
+      "title": "Office of Special Education and Rehabilitative Services (OSERS)",
+      "name": "osers",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office for Civil Rights (OCR)",
+      "name": "ocr",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of the Secretary (OS)",
+      "name": "os",
+      "subOrganizationOf": "edgov"
+    },
+    {
+      "title": "Office of Management (OM)",
+      "name": "om",
+      "subOrganizationOf": "ofo"
+    },
+    {
+      "title": "U.S. Department of Education",
+      "name": "edgov",
+      "subOrganizationOf": "usa"
+    },
+    {
+      "title": "Office of the Deputy Secretary (ODS)",
+      "name": "ods",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of Vocational and Adult Education (OVAE)",
+      "name": "ovae",
+      "subOrganizationOf": "octae"
+    },
+    {
+      "title": "Office of Finance and Operations (OFO)",
+      "name": "ofo",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of the Under Secretary (OUS)",
+      "name": "ous",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of the Chief Financial Officer (OCFO)",
+      "name": "ocfo",
+      "subOrganizationOf": "ofo"
+    },
+    {
+      "title": "Office of Safe and Drug-Free Schools (OSDFS)",
+      "name": "osdfs",
+      "subOrganizationOf": "oese"
+    },
+    {
+      "title": "Office of Planning, Evaluation and Program Development (OPEPD)",
+      "name": "opepd",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of English Language Acquisition (OELA)",
+      "name": "oela",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of Intergovernmental and Interagency Affairs (OIIA)",
+      "name": "oiia",
+      "subOrganizationOf": "oco"
+    },
+    {
+      "title": "Institute of Education Sciences (IES)",
+      "name": "ies",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of the Chief Information Officer (OCIO)",
+      "name": "ocio",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of Public Affairs (OPA)",
+      "name": "opa",
+      "subOrganizationOf": "oco"
+    },
+    {
+      "title": "Student Financial Assistance (SFA)",
+      "name": "sfa",
+      "subOrganizationOf": "fsa"
+    },
+    {
+      "title": "Office of Inspector General (OIG)",
+      "name": "oig",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of Legislation and Congressional Affairs (OLCA)",
+      "name": "olca",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Advisory Committee on Student Financial Assistance (ACSFA)",
+      "name": "acsfa",
+      "subOrganizationOf": "fsa"
+    },
+    {
+      "title": "Office of the General Counsel (OGC)",
+      "name": "ogc",
+      "subOrganizationOf": "os"
+    },
+    {
+      "title": "Office of Federal Student Aid (FSA)",
+      "name": "fsa",
+      "subOrganizationOf": "ous"
+    },
+    {
+      "title": "Office of Career, Technical and Adult Education (OCTAE)",
+      "name": "octae",
+      "subOrganizationOf": "ous"
+    },
+    {
+      "title": "National Center for Education Research (NCER)",
+      "name": "ncer",
+      "subOrganizationOf": "ies"
+    },
+    {
+      "title": "National Center for Education Statistics (NCES)",
+      "name": "nces",
+      "subOrganizationOf": "ies"
+    },
+    {
+      "title": "National Center for Education Evaluation and Regional Assistance (NCEERA)",
+      "name": "nceera",
+      "subOrganizationOf": "ies"
+    },
+    {
+      "title": "National Center for Special Education Research (NCSER)",
+      "name": "ncser",
+      "subOrganizationOf": "ies"
+    },
+    {
+      "title": "Office of Safe and Supportive Schools (OSSS)",
+      "name": "osss",
+      "subOrganizationOf": "oese"
+    },
+    {
+      "title": "U.S. Government",
+      "name": "usa",
+      "subOrganizationOf": null
+    }
+  ]
+  

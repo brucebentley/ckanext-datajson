@@ -539,13 +539,34 @@ class DatasetHarvesterBase(HarvesterBase):
             # TODO analyze if config "remote_orgs" could be useful here
             publisher = dataset.get('publisher', {})
             publisher_name = publisher.get('name', None)
-            if publisher_name is not None:
-                log.info('Publisher found: {}'.format(publisher))
-                org = publisher_to_org(publisher_name, self.context())
-                owner_org = org['id']
-            else:
+            if publisher_name is None:
                 log.error('No publisher, default to harvest source org')
                 owner_org = source_dataset.owner_org
+            else:
+                try:
+                    current_path = os.path.abspath(__file__)
+                    current_dir = os.path.split(current_path)[0]
+                    file_path = "ed_organization_hierarchy/organization_hierarchy.json"
+                    abs_file_path = os.path.join(current_dir, file_path)
+
+                    with open(abs_file_path) as orgs:
+                        for org in json.load(orgs):
+                            if '({})'.format(org['name'].upper()) in publisher_name:
+                                publisher_name = org['name']
+                            elif publisher_name in org['title']:
+                                publisher_name = org['name']
+
+                    publisher_object = get_action('organization_show')({}, {'id': publisher_name})
+
+                    owner_org = publisher_object['id']
+                    org = publisher_object
+                # If publisher doesn't exist, try to create it
+                except NotFound:
+                    log.info('Publisher found: {}'.format(publisher))
+                    org = publisher_to_org(publisher_name, self.context())
+                    owner_org = org['id']
+
+        skip_processed.append('publisher')
 
         group_name = config.get('default_groups', '')
         groups = [{"name": group_name}]
