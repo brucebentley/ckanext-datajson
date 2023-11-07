@@ -745,6 +745,28 @@ class DatasetHarvesterBase(HarvesterBase):
             pkg = get_action('package_update')(self.context(), pkg)
             log.info('Package updated {}'.format(pkg))
         else:
+            themes = pkg.get('theme')
+            extras = pkg.get('extras')
+
+            if not themes and extras:
+                themes = next((d['value'] for d in extras if d.get('key') == 'theme'), [])
+
+            for theme in themes:
+                try:
+                    log.error('Checking if group {} exists'.format(theme))
+                    group_dict = get_action('group_show')(self.context(), {'id': str(theme)})
+                    pkg.get('groups', []).append({'name': theme, 'id': group_dict['id']})
+                except:
+                    log.error('Group didn\'t exist yet')
+                    group_dict = get_action('group_create')(
+                        self.context(), {'name': str(theme), 'title': str(theme).title()}
+                    )
+                    pkg.get('groups', []).append({'name': theme, 'id': group_dict['id']})
+                    log.warn('Tried to create group %s and failed' % theme)
+
+            if pkg.get('theme'):
+                del(pkg['theme'])
+
             # It doesn't exist yet. Create a new one.
             pkg['name'] = self.make_package_name(dataset_processed["title"], harvest_object.guid)
             try:
