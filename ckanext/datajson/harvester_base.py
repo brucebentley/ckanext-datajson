@@ -753,11 +753,9 @@ class DatasetHarvesterBase(HarvesterBase):
 
             for theme in themes:
                 try:
-                    log.error('Checking if group {} exists'.format(theme))
                     group_dict = get_action('group_show')(self.context(), {'id': str(theme)})
                     pkg.get('groups', []).append({'name': theme, 'id': group_dict['id']})
                 except:
-                    log.error('Group didn\'t exist yet')
                     group_dict = get_action('group_create')(
                         self.context(), {'name': str(theme), 'title': str(theme).title()}
                     )
